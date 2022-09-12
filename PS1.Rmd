@@ -1,0 +1,265 @@
+---
+title: "Problem Set 1"
+author: "Isla Burch" 
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse=TRUE, prompt=TRUE,comment=NULL,message=FALSE, include=TRUE)
+```
+
+Push your knitted homework assignment (.Rmd, .md docs, and any other required files or folders) to GitHub by the given deadline. 
+
+### Problem 1: Markdown output
+Complete MDSR (your book) Appendix D exercises D.1-D.4 (3-6 in the second edition) without actually running the R chunk code given. Briefly explain why the code gives the output that you claim it will give.
+
+MDSR Questions:
+**D.1:**
+```{r}
+x<- 1:5
+```
+
+```{r}
+x<- x+1
+```
+
+```{r}
+x
+```
+  **Answer:** All the code 'x<-1:5' and 'x<-x+1' and 'x' should appear (as a code) once the file is knit. The third code chunk 'x' should return the new x list (after the changes of x+1 are added). So the third code chunk **should return the code: 'x' and the output: 2 3 4 5 6** (since this is the new 'x').
+  
+**D.2:**
+```{r echo=FALSE}
+x<- 1:5
+```
+
+```{r echo=FALSE}
+x<- x+1
+```
+
+```{r echo=FALSE}
+x
+```
+  **Answer:** While the code in this chunk is the same as the previous question, the result will be different due to the 'echo=FALSE' portion. This addition ('echo=FALSE') will result in **none of the code being reproduced (when the file is knit), but the output of x (2 3 4 5 6) should show up.**  
+  
+**D.3:**
+```{r echo=FALSE}
+x<- 1:5
+
+```
+
+```{r echo=FALSE, eval=FALSE}
+x<- x+1
+```
+
+```{r echo=FALSE}
+x
+```
+
+  **Answer:** echo=FALSE means that all the code will run, however the code chunk won't show up when the file is knit (this is when **echo=FALSE**). Further, the command x<- x+1 won't be translated as there is **eval=FALSE** which means that this part of the code is not running. In other words, once the .Rmd file is knit the output should be just the the original x, which is a list 1-5 (without any code associated with it). **echo=FALSE* prevents code from showing (code is still run just not visible)** in the knitted file, **eval=FALSE prevents the code from actually running** (hence why none the operator 'x+1' didn't change anything).
+
+**D.4:**
+```{r echo=FALSE}
+x<-1:5
+```
+
+```{r echo=FALSE}
+x<- x+1
+```
+
+```{r include=FALSE}
+x
+```
+ **Answer:** The first two code chunks contain 'echo=FALSE' which means that the code will run (but not show up in the knit file) but the result shouldn't show up since there is no 'x' line (if there was then this would show up). The last code chunk contains 'include=FALSE' this means that while the code runs in the .Rmd file (therefore it could be called in another code chunk) it will not appear once the file is knit. **Therefore, nothing should appear once the file is knit.**
+
+### Problem 2: Inline R code
+Consider the following R chunk and sentence with inline R code (which you can see in the .Rmd file):
+```{r}
+first <- "Foo"
+last <- "Fu"
+```
+**Sentence:** The bunny is named `r first`.
+
+Consider the following four commands:
+
+**1. `c(first,last)`**
+  The bunny is named `r c(first,last)`
+  
+_What type is this:_
+`r type1<- c(first,last)` `r typeof(type1)`
+
+_Length of vector:_
+`r length(type1)`
+
+  
+**2. `first last`**
+
+  
+**3. `paste(first,last)`**
+  The bunny is named `r paste(first,last)`
+  
+_What type is this:_  
+`r type3<- c(first,last)` `r typeof(type3)`
+
+_Length of vector:_
+`r length(type3)`
+
+**4. `paste0(first,last)`**
+  The bunny is named `r paste0(first,last)`
+  
+_What type is this:_
+`r type4<- c(first,last)` `r typeof(type4)`
+
+_Length of vector:_
+`r length(type4)`
+  
+For (1)-(4), replace the object `first` in the sentence above with the given command. Explain the following:
+
+- Which command (1)-(4) gives you an error? Why? (you'll need to omit this inline R code to knit your document!)
+- Explain the differences in output produced by the other three commands.  
+
+  **1.** Command (2) **—i.e. `first last`—** gave the error, I believe it is caused because _first last_ are two variables assigned to two different strings, and we are trying to "paste" them into a sentence, however, you must combine or concatenate them in some way beforehand. Essentially just typing the names of the variables that have "Foo" and "Fu" assigned to them doesn't do anything. 
+  
+  **2.** Command (1) is a concatenation so it is combining two strings into a *character vector*  and the two *character strings* are separated by a comma. The difference between **Command (3)** and **Command (4)** (even though they are both include "paste"), is that the paste() function has a **separator operator** which means that the two components have a space in between them when executed, which the past0() function doesn't have (and therefore the two strings are pasted directly after each other with no space in between). 
+
+
+### Problem 3: Logical vectors 
+Suppose we have a list of food (carrot, orange, m&m, apple, candy corn) that we characterize by color (orange or not) and candy (candy or not). Here are the data vectors describing each food: 
+```{r}
+orange <- c(TRUE, TRUE, FALSE, FALSE, TRUE)
+candy <- c(FALSE, FALSE, TRUE, FALSE, TRUE)
+table(orange, candy)
+```
+
+
+**1.** What type of food does the product of these vectors represent? (e.g. what does `x` of 0 mean? what does 1 mean?)
+```{r}
+x<- orange*candy
+x
+```
+**Answer:** The product represents **and**, meaning a food that is both orange and a candy: **candy corn**, the 0's represent "FALSE" and 1's represent "TRUE" so 1x1=1 means that it is TRUE for both orange and candy. The 0 means that the food is not orange **and** candy (the food could be either/or just not both).
+
+**2.** What type of food does the sum of these vectors represent? (e.g. what does `x` of 0 mean? what does 1 mean? a 2?)
+```{r}
+y <- orange + candy
+y
+```
+**Answer:** The plus sign represents **OR**, the element in the vector has to have either candy OR orange. The **0 represents apple** as it has neither of the attributes i.e. it is neither orange or candy, the **1 represents a food having either attribute** (candy or orange **ex: carrot or orange**), and **2 represents a food that has both attributes** (i.e. a food that is both orange and a candy **ex: candy corn**). 
+
+**3.** What type of food does expression below represent? (e.g. what does 0 mean? 1? -1? -2?)
+```{r}
+y*(-1)^orange
+```
+**Answer:** This is differentiating if the food is orange or not. The outcome of y<- orange + candy is (1,1,1,0,2) which represents if the food is orange OR candy (the 0 represents it is neither and the 2 represents it is both). This function, indicates if the food is orange since the whole expression is raised to the first power (so if the food is TRUE for the orange attribute it keeps its negativity).
+  The **-1 represents** an orange food that is not candy (**i.e. carrot and orange**), the **1 represents** candy that is not orange (**i.e. m&m**) as it is candy (1) but not orange so you the expression is [1x(-1)^0], the **0 represents** a food that is neither candy nor orange (**i.e. apple**), and the **-2 represents** a food that is both candy and orange (**i.e. candy corn**) the expression [2x(-1)^1].
+
+
+### Problem 4: Object classes and errors
+Complete Appendix exercises B.1 and B.9 (3 and 10 in the second edition). For exercise B.1, both describe what is returned and explain why that command produces the object. Try to answer these questions without using R, but you can use R to help or verify your answer. (e.g. This would be practice for an exam where you can't use R!)
+
+**B.1:**
+```{r}
+obj1 <- 2:10 
+obj2 <- c(2,5)
+obj3 <- c(TRUE, FALSE)
+obj4 <- 42
+```
+
+
+  **Answer:** 
+  *obj1* The list of 9 elements: 2 3 4 5 6 7 8 9 10 which are stored in the object obj1. If one were to type obj1 this list would be returned. 
+  *obj2* This would be a vector of 2 items, 2 and 5. The c() concatenates things, so it is taking two elements and combining them into a vector containing these two numbers. 
+  *obj3* Similar to obj2, this uses the c() function which turns the two elements TRUE FALSE into a vector. If one were to do length(obj3) it should be 2. 
+  *obj4* This is just storing value 42. If you were to call 'obj4' it should return 42. 
+  
+**B.9:**
+```{r}
+#result1 <- sqrt 10
+#result2 <-- "hello to you!"
+#3result <- "Hello to you"
+#result4 <- "Hello to you
+#result5 <- date()
+```
+**Answer:**
+  *result1* To find the square root of a number, you need the function sqrt() and input the number you want the function to be applied to. result1 does not have this (), which is why there's an error. 
+  *result2* There are two dashes '--' when using '<-' you only need one dash '-'. 
+  *3result* You can't have a number starting the string, the correct name would be 'result3'
+  *result4* You need to close the quote, having only 1 doesn't work. " "
+  *result5* The date() function, converts/translates a certain data type into the date data type. I believe this function should take an input (or two?). 
+  
+  
+### Problem 5: Object classes and data types
+Complete Appendix exercise B.2 (9 in the second edition). In addition to describing the *class* of object returned by each command, you should explain the *data type(s)* in each object (e.g. are entries numeric? character? etc).
+```{r}
+a <- c(10,15)
+b<-c(TRUE, FALSE)
+c<-c("happy", "sad")
+```
+
+```{r}
+class(a)
+class(b)
+class(c)
+typeof(a)
+typeof(b)
+typeof(c)
+```
+**Answer:**  
+**Class Type:** a's class is "numeric" (this means the vector only contains numbers), b's class is "logical" (logical vectors only contain TRUE/FALSE), and c's class is "character" (it only contains strings or letters). 
+**Data Type:** a's data type is double (this means that the numbers are stored as decimals i.e. 10 is stored as 10.00, this corresponds to the numeric class and double data type. Further the 10.00 is **NOT AN INTEGER**). b's data type is logical data type (TRUE/FALSE, often used to compare two varibales i.e. z= x>y print(z) --> TRUE (**z is a logical data type**)). c's data type is character since it has a vector of two strings (a character data type can include letters, symbols, or numbers so long as they are enclosed by " " or ' ' —this is the telltale sign). 
+
+### Problem 6: Lists
+Consider the list below.
+```{r}
+mylist <- list(x1="sally", x2=42, x3=FALSE, x4=1:5)
+mylist$x4[3:4] #gets the 3rd and 4th elements of the x4 element of the list
+length('x4') #this shows that the length of x4 is 1 (but thats not true), so doesn't work 
+length(mylist$x4) #this works to get the length of the x4 element of mylist 
+```
+Show how to produce the following output in **one command**:
+
+a. `"sally"` (atomic character vector of length 1) 
+  **Answer:**  mylist[1]  **length:** `r length(mylist[1])`
+b. `42`  (atomic numeric vector of length 1)
+  **Answer:**   mylist['x2'] **length:** `r length(mylist['x2'])`
+c. the 3rd and 4th entries in `x4` (atomic numeric vector of length 2)
+  **Answer:** mylist$x4[3:4] **length:** `r length(mylist$x4[3:4])`
+d. the length of `x4` 
+  **Answer:** length(mylist$x4) **length:** `r length(mylist$x4)`
+
+### Problem 7: More lists
+Use the same list as problem 6. What type of objects are produced with the following commands:
+```{r}
+mylist <- list(x1="sally", x2=42, x3=FALSE, x4=1:5)
+print(mylist)
+length(mylist)
+typeof(mylist[1])
+typeof(mylist[[1]])
+typeof(unlist(mylist))
+```
+
+a. `mylist[1]` 
+  **Answer:** typeof(mylist[1]) --> `r typeof(mylist[1])`
+b. `mylist[[1]]`
+   **Answer:** typeof(mylist[[1]]) --> `r typeof(mylist[[1]])`
+c. `unlist(mylist)`
+   **Answer:** typeof(unlist(mylist)) --> `r typeof(unlist(mylist))`
+
+### Problem 8: Yet more lists
+Use the same list as problem 6. Suppose you want to add a vector `x5` to `mylist` so `mylist` has length 5. You try two ways of doing this, shown below. Carefully describe and show the object that is produced by each of these commands and explain whether the command produces your desired list. 
+```{r}
+mylist <- list(mylist, x5=c(1,-7,3))
+mylist
+```
+
+```{r}
+# mylist$x5 <- c(1,-7,3)
+# print(mylist)
+# length(mylist)
+```
+a. `mylist <- list(mylist, x5=c(1,-7,3))`
+  **Answer:** No this does not give the desired outcome, as length(mylist) is 2 and not 5. This is creating a new list that has two components, the first being 'mylist' and the other being 'x5'. So it has two items each of which are lists (or in otherwords it has two sublists). This is not combining lists, but creating a new list with these sublists (indicated by the [[1]][[1]]$x1 (could be any element 1-4 x1 x2 x3 x4 of the sublist) or [[1]]$x5 for the second element in the list i.e. the new addition), hence why the list has a length of 2 and not 5. 
+b. `mylist$x5 <- c(1,-7,3)`
+  **Answer:** Yes this does give the desired outcome. It produces a 5 element list (no sublists). When you print the list, you get each of the 5 elements and their positions. 
+
+
